@@ -1,7 +1,7 @@
 import { Experience, ExperienceStats } from "./types";
 
 // Vidéo placeholder pour la démo
-const PLACEHOLDER_VIDEO = "https://www.w3schools.com/html/mov_bbb.mp4";
+const PLACEHOLDER_VIDEO = "/videos/French_Revolution.mp4";
 
 export const verifiedExperiences: Experience[] = [
   {
