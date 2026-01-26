@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --foreground-rgb: 15, 23, 42;
+    --background-start-rgb: 249, 250, 251;
+    --background-end-rgb: 255, 255, 255;
+  }
+
+  .dark {
+    --foreground-rgb: 241, 245, 249;
+    --background-start-rgb: 2, 6, 23;
+    --background-end-rgb: 15, 23, 42;
+  }
+
+  body {
+    color: rgb(var(--foreground-rgb));
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .glassmorphism {
+    @apply bg-white/30 dark:bg-white/20 backdrop-blur-2xl border-2 border-white/50 dark:border-white/30 shadow-2xl;
+  }
+
+  .glassmorphism-dark {
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(30px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Masquer les contrôles vidéo pour le lecteur immersif */
+.immersive-video::-webkit-media-controls {
+  display: none !important;
+}
+
+.immersive-video::-webkit-media-controls-panel {
+  display: none !important;
+}
+
+.immersive-video::-webkit-media-controls-play-button {
+  display: none !important;
+}
+
+.immersive-video::-webkit-media-controls-timeline {
+  display: none !important;
+}
+
+.immersive-video::-webkit-media-controls-current-time-display {
+  display: none !important;
+}
+
+.immersive-video::-webkit-media-controls-time-remaining-display {
+  display: none !important;
+}
+
+.immersive-video::-webkit-media-controls-mute-button {
+  display: none !important;
+}
+
+.immersive-video::-webkit-media-controls-volume-slider {
+  display: none !important;
+}
+
+.immersive-video::-webkit-media-controls-fullscreen-button {
+  display: none !important;
+}
+
+.immersive-video::-webkit-media-controls-enclosure {
+  display: none !important;
+}
