@@ -28,7 +28,7 @@ interface PricingFeature {
 const pricingPlans = [
     {
         name: "Découverte",
-        price: 9,
+        price: 9.99,
         description: "Parfait pour découvrir l'univers Neuvia",
         icon: <Star className="w-8 h-8" />,
         popular: false,
@@ -37,7 +37,7 @@ const pricingPlans = [
     },
     {
         name: "Essentiel",
-        price: 29,
+        price: 29.99,
         description: "L'essentiel pour une utilisation régulière",
         icon: <Zap className="w-8 h-8" />,
         popular: true,
@@ -46,7 +46,7 @@ const pricingPlans = [
     },
     {
         name: "Premium",
-        price: 49,
+        price: 49.99,
         description: "L'expérience complète sans limites",
         icon: <Crown className="w-8 h-8" />,
         popular: false,
@@ -204,7 +204,7 @@ export default function PricingPage() {
                                         </p>
                                         <div className="flex items-end justify-center gap-1">
                                             <span className="text-5xl font-bold text-neutral-900 dark:text-neutral-100">
-                                                {plan.price}€
+                                                {plan.price.toLocaleString('fr-FR', { minimumFractionDigits: 2 })}€
                                             </span>
                                             <span className="text-neutral-500 dark:text-neutral-400 mb-2">
                                                 / mois
