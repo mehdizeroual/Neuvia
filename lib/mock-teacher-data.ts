@@ -21,8 +21,9 @@ const lastNames = [
 function generateStudent(id: string, className: string): Student {
   const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
   const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
-  const averageScore = Math.round((Math.random() * 8 + 10) * 10) / 10; // Entre 10 et 18
   const completedExperiences = Math.floor(Math.random() * 12) + 1;
+  const totalBadges = completedExperiences * 4; // 4 badges par expérience
+  const badgesEarned = Math.floor(totalBadges * (0.6 + Math.random() * 0.4)); // Entre 60% et 100% des badges
   const daysAgo = Math.floor(Math.random() * 7);
   const lastActivity = new Date();
   lastActivity.setDate(lastActivity.getDate() - daysAgo);
@@ -33,7 +34,8 @@ function generateStudent(id: string, className: string): Student {
     lastName,
     email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.fr`,
     class: className,
-    averageScore,
+    badgesEarned,
+    totalBadges,
     completedExperiences,
     lastActivity,
   };
@@ -68,7 +70,7 @@ export interface TeacherExperience {
   classLevel: string;
   createdAt: Date;
   usageCount: number;
-  averageScore: number;
+  badgeCompletionRate: number; // Pourcentage de badges obtenus
   status: "active" | "draft" | "archived";
 }
 
@@ -80,7 +82,7 @@ export const mockTeacherExperiences: TeacherExperience[] = [
     classLevel: "Première",
     createdAt: new Date("2025-11-15"),
     usageCount: 45,
-    averageScore: 16.2,
+    badgeCompletionRate: 85,
     status: "active",
   },
   {
@@ -90,7 +92,7 @@ export const mockTeacherExperiences: TeacherExperience[] = [
     classLevel: "Terminale",
     createdAt: new Date("2025-11-20"),
     usageCount: 32,
-    averageScore: 15.8,
+    badgeCompletionRate: 78,
     status: "active",
   },
   {
@@ -100,7 +102,7 @@ export const mockTeacherExperiences: TeacherExperience[] = [
     classLevel: "Première",
     createdAt: new Date("2025-12-01"),
     usageCount: 58,
-    averageScore: 17.1,
+    badgeCompletionRate: 92,
     status: "active",
   },
   {
@@ -110,7 +112,7 @@ export const mockTeacherExperiences: TeacherExperience[] = [
     classLevel: "Première",
     createdAt: new Date("2025-12-10"),
     usageCount: 41,
-    averageScore: 14.5,
+    badgeCompletionRate: 68,
     status: "active",
   },
   {
@@ -120,7 +122,7 @@ export const mockTeacherExperiences: TeacherExperience[] = [
     classLevel: "Terminale",
     createdAt: new Date("2025-12-18"),
     usageCount: 28,
-    averageScore: 16.8,
+    badgeCompletionRate: 88,
     status: "active",
   },
   {
@@ -130,7 +132,7 @@ export const mockTeacherExperiences: TeacherExperience[] = [
     classLevel: "Première",
     createdAt: new Date("2026-01-05"),
     usageCount: 15,
-    averageScore: 15.2,
+    badgeCompletionRate: 75,
     status: "active",
   },
   {
@@ -140,7 +142,7 @@ export const mockTeacherExperiences: TeacherExperience[] = [
     classLevel: "Terminale",
     createdAt: new Date("2026-01-15"),
     usageCount: 8,
-    averageScore: 0,
+    badgeCompletionRate: 0,
     status: "draft",
   },
 ];
@@ -172,37 +174,43 @@ export const mockClasses: ClassGroup[] = [
 export const mockTeacherStats: TeacherStats = {
   totalStudents: mockStudents.length,
   totalClasses: mockClasses.length,
-  averageClassScore: 15.2,
+  totalBadgesEarned: 2450,
+  totalBadgesPossible: 3240,
   mostActiveClass: "Première A",
   recentActivity: [
     {
       studentName: "Emma Bernard",
       experienceTitle: "La Révolution française en immersion",
-      score: 18,
+      badgesEarned: 4,
+      totalBadges: 4,
       date: new Date("2025-12-30"),
     },
     {
       studentName: "Sarah Leroy",
       experienceTitle: "L'ADN et la génétique",
-      score: 17,
+      badgesEarned: 4,
+      totalBadges: 4,
       date: new Date("2025-12-30"),
     },
     {
       studentName: "Léa Dubois",
       experienceTitle: "Le système solaire en 3D",
-      score: 16,
+      badgesEarned: 3,
+      totalBadges: 4,
       date: new Date("2025-12-30"),
     },
     {
       studentName: "Chloé Laurent",
       experienceTitle: "La chimie des réactions",
-      score: 17,
+      badgesEarned: 4,
+      totalBadges: 4,
       date: new Date("2025-12-30"),
     },
     {
       studentName: "Alice Dupont",
       experienceTitle: "Les grandes découvertes",
-      score: 19,
+      badgesEarned: 4,
+      totalBadges: 4,
       date: new Date("2025-12-29"),
     },
   ],

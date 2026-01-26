@@ -4,11 +4,34 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { mockClasses } from "@/lib/mock-teacher-data";
-import { ClassGroup, Student } from "@/lib/teacher-types";
+import { ClassGroup } from "@/lib/teacher-types";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
-import { ArrowLeft, Users, TrendingUp, Mail, Award } from "lucide-react";
+import { ArrowLeft, Users, Trophy, Mail, Award, Search, Lightbulb, Star } from "lucide-react";
+
+// Composant pour afficher les badges d'un élève
+const StudentBadgeProgress = ({ earned, total }: { earned: number; total: number }) => {
+  const percentage = total > 0 ? Math.round((earned / total) * 100) : 0;
+
+  const getProgressColor = (pct: number) => {
+    if (pct >= 75) return "text-green-500";
+    if (pct >= 50) return "text-amber-500";
+    return "text-red-500";
+  };
+
+  const getProgressBg = (pct: number) => {
+    if (pct >= 75) return "bg-green-500/10 border-green-500/30";
+    if (pct >= 50) return "bg-amber-500/10 border-amber-500/30";
+    return "bg-red-500/10 border-red-500/30";
+  };
+
+  return (
+    <div className={`px-3 py-1 rounded-lg border font-bold ${getProgressBg(percentage)} ${getProgressColor(percentage)}`}>
+      {earned}/{total}
+    </div>
+  );
+};
 
 export default function ClassDetailPage() {
   const { user, isLoading } = useAuth();
@@ -43,26 +66,22 @@ export default function ClassDetailPage() {
     );
   }
 
-  const getScoreColor = (score: number) => {
-    if (score >= 16) return "text-green-500";
-    if (score >= 12) return "text-amber-500";
-    return "text-red-500";
-  };
-
-  const getScoreBg = (score: number) => {
-    if (score >= 16) return "bg-green-500/10 border-green-500/30";
-    if (score >= 12) return "bg-amber-500/10 border-amber-500/30";
-    return "bg-red-500/10 border-red-500/30";
-  };
-
-  const averageScore =
-    classData.students.reduce((sum, s) => sum + s.averageScore, 0) /
-    classData.students.length;
+  const totalBadgesEarned = classData.students.reduce((sum, s) => sum + s.badgesEarned, 0);
+  const totalBadgesPossible = classData.students.reduce((sum, s) => sum + s.totalBadges, 0);
+  const badgePercentage = totalBadgesPossible > 0
+    ? Math.round((totalBadgesEarned / totalBadgesPossible) * 100)
+    : 0;
 
   const totalExperiences = classData.students.reduce(
     (sum, s) => sum + s.completedExperiences,
     0
   );
+
+  const getProgressColor = (pct: number) => {
+    if (pct >= 75) return "text-green-500";
+    if (pct >= 50) return "text-amber-500";
+    return "text-red-500";
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-primary/5 dark:from-neutral-900 dark:to-primary/10">
@@ -111,17 +130,16 @@ export default function ClassDetailPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
-                  Moyenne de classe
+                  Badges obtenus
                 </p>
-                <p
-                  className={`text-3xl font-bold ${getScoreColor(
-                    averageScore
-                  )}`}
-                >
-                  {averageScore.toFixed(1)}/20
+                <p className={`text-3xl font-bold ${getProgressColor(badgePercentage)}`}>
+                  {badgePercentage}%
+                </p>
+                <p className="text-xs text-neutral-500 mt-1">
+                  {totalBadgesEarned} / {totalBadgesPossible}
                 </p>
               </div>
-              <TrendingUp className="text-secondary" size={32} />
+              <Trophy className="text-secondary" size={32} />
             </div>
           </Card>
 
@@ -139,6 +157,43 @@ export default function ClassDetailPage() {
             </div>
           </Card>
         </div>
+
+        {/* Légende des badges */}
+        <Card className="mb-8 bg-neutral-50 dark:bg-neutral-900/50">
+          <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
+            Signification des badges
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="flex items-center gap-3">
+              <Search className="w-6 h-6 text-blue-500" />
+              <div>
+                <p className="font-medium text-neutral-900 dark:text-neutral-100 text-sm">Exploration</p>
+                <p className="text-xs text-neutral-600 dark:text-neutral-400">Début de l'expérience</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Lightbulb className="w-6 h-6 text-amber-500" />
+              <div>
+                <p className="font-medium text-neutral-900 dark:text-neutral-100 text-sm">Découverte</p>
+                <p className="text-xs text-neutral-600 dark:text-neutral-400">Compréhension des concepts</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Star className="w-6 h-6 text-purple-500" />
+              <div>
+                <p className="font-medium text-neutral-900 dark:text-neutral-100 text-sm">Maîtrise</p>
+                <p className="text-xs text-neutral-600 dark:text-neutral-400">Compétences acquises</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Trophy className="w-6 h-6 text-green-500" />
+              <div>
+                <p className="font-medium text-neutral-900 dark:text-neutral-100 text-sm">Excellence</p>
+                <p className="text-xs text-neutral-600 dark:text-neutral-400">Expertise complète</p>
+              </div>
+            </div>
+          </div>
+        </Card>
 
         {/* Students Table */}
         <Card>
@@ -160,7 +215,7 @@ export default function ClassDetailPage() {
                     Expériences
                   </th>
                   <th className="text-center py-3 px-4 text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-                    Moyenne
+                    Badges
                   </th>
                   <th className="text-center py-3 px-4 text-sm font-semibold text-neutral-700 dark:text-neutral-300">
                     Dernière activité
@@ -193,13 +248,10 @@ export default function ClassDetailPage() {
                       </td>
                       <td className="py-4 px-4">
                         <div className="flex justify-center">
-                          <div
-                            className={`px-3 py-1 rounded-lg border font-bold ${getScoreBg(
-                              student.averageScore
-                            )} ${getScoreColor(student.averageScore)}`}
-                          >
-                            {student.averageScore.toFixed(1)}/20
-                          </div>
+                          <StudentBadgeProgress
+                            earned={student.badgesEarned}
+                            total={student.totalBadges}
+                          />
                         </div>
                       </td>
                       <td className="py-4 px-4 text-center text-sm text-neutral-600 dark:text-neutral-400">

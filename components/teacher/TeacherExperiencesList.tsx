@@ -5,7 +5,7 @@ import { TeacherExperience } from "@/lib/mock-teacher-data";
 import {
     Sparkles,
     Users,
-    TrendingUp,
+    Trophy,
     Calendar,
     MoreVertical,
     Edit,
@@ -130,15 +130,15 @@ function ExperienceCard({ experience }: ExperienceCardProps) {
                 </div>
                 <div className="text-center">
                     <div className="flex items-center justify-center gap-1 text-neutral-500 dark:text-neutral-400 mb-1">
-                        <TrendingUp size={14} />
+                        <Trophy size={14} />
                     </div>
                     <p className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
-                        {experience.averageScore > 0
-                            ? `${experience.averageScore}/20`
+                        {experience.badgeCompletionRate > 0
+                            ? `${experience.badgeCompletionRate}%`
                             : "-"}
                     </p>
                     <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                        moyenne
+                        badges
                     </p>
                 </div>
                 <div className="text-center">

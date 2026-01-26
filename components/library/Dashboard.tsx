@@ -1,39 +1,44 @@
 "use client";
 
-import { mockUserStats } from "@/lib/mock-stats";
+import { mockUserStats, countEarnedBadges } from "@/lib/mock-stats";
 import StatsCard from "./StatsCard";
 import CompletedExperienceRow from "./CompletedExperienceRow";
 import {
   BookOpen,
-  TrendingUp,
+  Trophy,
   Clock,
   Award,
   Flame,
-  ArrowUp,
-  ArrowDown,
+  Search,
+  Lightbulb,
+  Star,
 } from "lucide-react";
 import Card from "@/components/ui/Card";
+import { BADGE_CONFIG, BadgeType } from "@/lib/types";
 
 export default function Dashboard() {
   const stats = mockUserStats;
 
-  // Calculer les stats par matière
+  // Calculer les stats de badges par matière
   const subjectStats = stats.completedExperiences.reduce(
     (acc, exp) => {
       if (!acc[exp.subject]) {
-        acc[exp.subject] = { count: 0, totalScore: 0 };
+        acc[exp.subject] = { count: 0, badgesEarned: 0, totalBadges: 0 };
       }
       acc[exp.subject].count++;
-      acc[exp.subject].totalScore += exp.score;
+      acc[exp.subject].badgesEarned += countEarnedBadges(exp.badges);
+      acc[exp.subject].totalBadges += 4;
       return acc;
     },
-    {} as Record<string, { count: number; totalScore: number }>
+    {} as Record<string, { count: number; badgesEarned: number; totalBadges: number }>
   );
 
   const subjectAverages = Object.entries(subjectStats).map(
     ([subject, data]) => ({
       subject,
-      average: (data.totalScore / data.count).toFixed(1),
+      badgesEarned: data.badgesEarned,
+      totalBadges: data.totalBadges,
+      percentage: Math.round((data.badgesEarned / data.totalBadges) * 100),
       count: data.count,
     })
   );
@@ -42,6 +47,8 @@ export default function Dashboard() {
   const recentExperiences = [...stats.completedExperiences]
     .sort((a, b) => b.completedAt.getTime() - a.completedAt.getTime())
     .slice(0, 5);
+
+  const badgePercentage = Math.round((stats.totalBadgesEarned / stats.totalBadgesPossible) * 100);
 
   return (
     <div className="space-y-8">
@@ -58,11 +65,11 @@ export default function Dashboard() {
             color="primary"
           />
           <StatsCard
-            title="Moyenne générale"
-            value={`${stats.averageScore}/20`}
-            icon={<TrendingUp size={24} />}
+            title="Badges obtenus"
+            value={`${stats.totalBadgesEarned}/${stats.totalBadgesPossible}`}
+            icon={<Trophy size={24} />}
             color="success"
-            subtitle="Très bien !"
+            subtitle={`${badgePercentage}% de réussite`}
           />
           <StatsCard
             title="Temps d'apprentissage"
@@ -82,15 +89,49 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Légende des badges */}
+      <Card className="bg-neutral-50 dark:bg-neutral-900/50">
+        <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
+          Signification des badges
+        </h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {(Object.keys(BADGE_CONFIG) as BadgeType[]).map((type) => {
+            const config = BADGE_CONFIG[type];
+            const IconComponent =
+              type === "exploration" ? Search :
+              type === "discovery" ? Lightbulb :
+              type === "mastery" ? Star : Trophy;
+            const colorClass =
+              type === "exploration" ? "text-blue-500" :
+              type === "discovery" ? "text-amber-500" :
+              type === "mastery" ? "text-purple-500" : "text-green-500";
+
+            return (
+              <div key={type} className="flex items-center gap-3">
+                <IconComponent className={`w-6 h-6 ${colorClass}`} />
+                <div>
+                  <p className="font-medium text-neutral-900 dark:text-neutral-100 text-sm">
+                    {config.label}
+                  </p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                    {config.description}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </Card>
+
       {/* Performance par matière */}
       <div>
         <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-6">
-          Performance par matière
+          Progression par matière
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {subjectAverages.map(({ subject, average, count }) => {
-            const avgNum = parseFloat(average);
-            const isGood = avgNum >= 14;
+          {subjectAverages.map(({ subject, badgesEarned, totalBadges, percentage, count }) => {
+            const isGood = percentage >= 75;
+            const isSatisfactory = percentage >= 50;
 
             return (
               <Card key={subject}>
@@ -113,33 +154,23 @@ export default function Dashboard() {
                     className={`text-3xl font-bold ${
                       isGood
                         ? "text-green-500"
-                        : avgNum >= 10
+                        : isSatisfactory
                         ? "text-amber-500"
                         : "text-red-500"
                     }`}
                   >
-                    {average}/20
+                    {badgesEarned}/{totalBadges}
                   </span>
-                  <span
-                    className={`flex items-center text-sm mb-1 ${
-                      isGood ? "text-green-500" : "text-neutral-500"
-                    }`}
-                  >
-                    {isGood ? (
-                      <>
-                        <ArrowUp size={16} />
-                        Excellent
-                      </>
-                    ) : avgNum >= 10 ? (
-                      "Satisfaisant"
-                    ) : (
-                      <>
-                        <ArrowDown size={16} />
-                        À améliorer
-                      </>
-                    )}
+                  <span className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
+                    badges
                   </span>
                 </div>
+
+                <p className={`text-sm mt-1 ${
+                  isGood ? "text-green-500" : isSatisfactory ? "text-amber-500" : "text-neutral-500"
+                }`}>
+                  {isGood ? "Excellent !" : isSatisfactory ? "Satisfaisant" : "À améliorer"}
+                </p>
 
                 {/* Barre de progression */}
                 <div className="mt-4 h-2 bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
@@ -147,11 +178,11 @@ export default function Dashboard() {
                     className={`h-full transition-all duration-500 ${
                       isGood
                         ? "bg-green-500"
-                        : avgNum >= 10
+                        : isSatisfactory
                         ? "bg-amber-500"
                         : "bg-red-500"
                     }`}
-                    style={{ width: `${(avgNum / 20) * 100}%` }}
+                    style={{ width: `${percentage}%` }}
                   />
                 </div>
               </Card>
@@ -176,12 +207,11 @@ export default function Dashboard() {
       <Card className="bg-gradient-to-br from-primary/5 to-secondary/5 dark:from-primary/10 dark:to-secondary/10 border-primary/20">
         <div className="text-center py-6">
           <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
-            Excellent travail ! 🎉
+            Excellent travail !
           </h3>
           <p className="text-neutral-700 dark:text-neutral-300">
-            Tu maintiens une moyenne de <strong>{stats.averageScore}/20</strong>{" "}
-            sur {stats.totalExperiences} expériences. Continue à explorer et à
-            apprendre !
+            Tu as obtenu <strong>{stats.totalBadgesEarned} badges</strong> sur {stats.totalBadgesPossible} possibles ({badgePercentage}%).
+            Continue à explorer et à débloquer de nouveaux badges !
           </p>
         </div>
       </Card>

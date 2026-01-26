@@ -68,10 +68,11 @@ export default function TeacherDashboard() {
             color="secondary"
           />
           <StatsCard
-            title="Moyenne générale"
-            value={`${stats.averageClassScore}/20`}
+            title="Badges obtenus"
+            value={`${stats.totalBadgesEarned}/${stats.totalBadgesPossible}`}
             icon={<TrendingUp size={24} />}
             color="success"
+            subtitle={`${Math.round((stats.totalBadgesEarned / stats.totalBadgesPossible) * 100)}% de réussite`}
           />
           <StatsCard
             title="Classe la plus active"

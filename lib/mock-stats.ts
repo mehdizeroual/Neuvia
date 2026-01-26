@@ -1,17 +1,37 @@
+import { BadgeType, ProgressBadge, BADGE_CONFIG } from "./types";
+
 export interface CompletedExperience {
   id: string;
   experienceTitle: string;
   subject: string;
   level: string;
   completedAt: Date;
-  score: number; // Note sur 20
+  badges: ProgressBadge[]; // Badges de progression
   duration: number; // Durée en minutes
   attempts: number;
 }
 
+// Helper pour créer des badges à partir d'un niveau atteint
+export function createBadgesFromLevel(level: number): ProgressBadge[] {
+  const badgeTypes: BadgeType[] = ["exploration", "discovery", "mastery", "excellence"];
+  return badgeTypes.map((type, index) => ({
+    type,
+    label: BADGE_CONFIG[type].label,
+    icon: BADGE_CONFIG[type].icon,
+    earned: index < level,
+    earnedAt: index < level ? new Date() : undefined,
+  }));
+}
+
+// Compte les badges obtenus
+export function countEarnedBadges(badges: ProgressBadge[]): number {
+  return badges.filter(b => b.earned).length;
+}
+
 export interface UserStats {
   totalExperiences: number;
-  averageScore: number;
+  totalBadgesEarned: number;
+  totalBadgesPossible: number;
   totalTimeSpent: number; // En minutes
   bestSubject: string;
   currentStreak: number; // Jours consécutifs
@@ -20,7 +40,8 @@ export interface UserStats {
 
 export const mockUserStats: UserStats = {
   totalExperiences: 12,
-  averageScore: 15.8,
+  totalBadgesEarned: 42,
+  totalBadgesPossible: 48, // 12 expériences x 4 badges
   totalTimeSpent: 420, // 7 heures
   bestSubject: "Histoire",
   currentStreak: 5,
@@ -31,7 +52,7 @@ export const mockUserStats: UserStats = {
       subject: "Histoire",
       level: "3ème",
       completedAt: new Date("2025-12-28"),
-      score: 18,
+      badges: createBadgesFromLevel(4), // Excellence
       duration: 45,
       attempts: 1,
     },
@@ -41,7 +62,7 @@ export const mockUserStats: UserStats = {
       subject: "Sciences",
       level: "Seconde",
       completedAt: new Date("2025-12-27"),
-      score: 16,
+      badges: createBadgesFromLevel(4), // Excellence
       duration: 35,
       attempts: 2,
     },
@@ -51,7 +72,7 @@ export const mockUserStats: UserStats = {
       subject: "Mathématiques",
       level: "Seconde",
       completedAt: new Date("2025-12-26"),
-      score: 14,
+      badges: createBadgesFromLevel(3), // Maîtrise
       duration: 40,
       attempts: 1,
     },
@@ -61,7 +82,7 @@ export const mockUserStats: UserStats = {
       subject: "Histoire",
       level: "Terminale",
       completedAt: new Date("2025-12-25"),
-      score: 17,
+      badges: createBadgesFromLevel(4), // Excellence
       duration: 50,
       attempts: 1,
     },
@@ -71,7 +92,7 @@ export const mockUserStats: UserStats = {
       subject: "Sciences",
       level: "Première",
       completedAt: new Date("2025-12-24"),
-      score: 15,
+      badges: createBadgesFromLevel(3), // Maîtrise
       duration: 38,
       attempts: 2,
     },
@@ -81,7 +102,7 @@ export const mockUserStats: UserStats = {
       subject: "Mathématiques",
       level: "3ème",
       completedAt: new Date("2025-12-23"),
-      score: 13,
+      badges: createBadgesFromLevel(2), // Découverte
       duration: 30,
       attempts: 3,
     },
@@ -91,7 +112,7 @@ export const mockUserStats: UserStats = {
       subject: "Histoire",
       level: "Seconde",
       completedAt: new Date("2025-12-22"),
-      score: 19,
+      badges: createBadgesFromLevel(4), // Excellence
       duration: 42,
       attempts: 1,
     },
@@ -101,7 +122,7 @@ export const mockUserStats: UserStats = {
       subject: "Histoire",
       level: "3ème",
       completedAt: new Date("2025-12-21"),
-      score: 16,
+      badges: createBadgesFromLevel(4), // Excellence
       duration: 35,
       attempts: 1,
     },
@@ -111,7 +132,7 @@ export const mockUserStats: UserStats = {
       subject: "Sciences",
       level: "Seconde",
       completedAt: new Date("2025-12-20"),
-      score: 15,
+      badges: createBadgesFromLevel(3), // Maîtrise
       duration: 28,
       attempts: 2,
     },
@@ -121,7 +142,7 @@ export const mockUserStats: UserStats = {
       subject: "Sciences",
       level: "Terminale",
       completedAt: new Date("2025-12-19"),
-      score: 17,
+      badges: createBadgesFromLevel(4), // Excellence
       duration: 48,
       attempts: 1,
     },
@@ -131,7 +152,7 @@ export const mockUserStats: UserStats = {
       subject: "Mathématiques",
       level: "3ème",
       completedAt: new Date("2025-12-18"),
-      score: 14,
+      badges: createBadgesFromLevel(3), // Maîtrise
       duration: 32,
       attempts: 2,
     },
@@ -141,7 +162,7 @@ export const mockUserStats: UserStats = {
       subject: "Histoire",
       level: "Seconde",
       completedAt: new Date("2025-12-17"),
-      score: 18,
+      badges: createBadgesFromLevel(4), // Excellence
       duration: 44,
       attempts: 1,
     },
