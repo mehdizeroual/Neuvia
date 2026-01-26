@@ -85,7 +85,7 @@ export default function ClassDetailPage() {
               </h1>
               <div className="flex items-center gap-3">
                 <Badge variant="default">{classData.level}</Badge>
-                <Badge variant="secondary">{classData.section}</Badge>
+                <Badge variant="default">{classData.section}</Badge>
               </div>
             </div>
           </div>
