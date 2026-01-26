@@ -17,67 +17,72 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/40 dark:bg-neutral-900/40 backdrop-blur-3xl border-b-2 border-white/50 dark:border-white/20 shadow-xl">
-      <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-auto max-w-4xl">
+      <nav className="px-6 py-3 flex items-center justify-between rounded-full bg-white/20 dark:bg-white/5 backdrop-blur-2xl border border-white/30 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)] ring-1 ring-inset ring-white/20 dark:ring-white/5">
         {/* Logo */}
         <Link href={user ? "/library" : "/"} className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold text-gradient">Neuvia</h1>
+          <h1 className="text-xl font-bold text-gradient">Neuvia</h1>
         </Link>
 
-        {/* Navigation */}
-        <div className="flex items-center gap-4">
-          <ThemeToggle />
-          {user ? (
-            <>
-              <Link
-                href="/library"
-                className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300 hover:text-primary transition-colors"
-              >
-                <Library size={20} />
-                <span className="hidden sm:inline">Bibliothèque</span>
-              </Link>
-
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 dark:text-neutral-500">
-                  <User size={18} />
-                  <span className="text-sm hidden sm:inline">{user.email}</span>
-                </div>
-
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleLogout}
-                  className="flex items-center gap-2"
-                >
-                  <LogOut size={18} />
-                  <span className="hidden sm:inline">Déconnexion</span>
-                </Button>
-              </div>
-            </>
-          ) : (
+        {/* Navigation centrale */}
+        <div className="hidden md:flex items-center gap-1">
+          {!user && (
             <>
               <Link
                 href="/about"
-                className="text-neutral-700 dark:text-neutral-300 hover:text-primary transition-colors hidden md:inline"
+                className="px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:text-primary hover:bg-primary/5 rounded-full transition-all"
               >
                 À propos
               </Link>
               <Link
                 href="/how-it-works"
-                className="text-neutral-700 dark:text-neutral-300 hover:text-primary transition-colors hidden md:inline"
+                className="px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:text-primary hover:bg-primary/5 rounded-full transition-all"
               >
                 Comment ça marche
               </Link>
               <Link
                 href="/pricing"
-                className="text-neutral-700 dark:text-neutral-300 hover:text-primary transition-colors hidden md:inline"
+                className="px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:text-primary hover:bg-primary/5 rounded-full transition-all"
               >
                 Tarifs
               </Link>
-              <Link href="/login">
-                <Button size="sm">Se connecter</Button>
-              </Link>
             </>
+          )}
+          {user && (
+            <Link
+              href="/library"
+              className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:text-primary hover:bg-primary/5 rounded-full transition-all"
+            >
+              <Library size={18} />
+              Bibliothèque
+            </Link>
+          )}
+        </div>
+
+        {/* Actions à droite */}
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+
+          {user ? (
+            <div className="flex items-center gap-2">
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-neutral-100/50 dark:bg-neutral-800/50 text-neutral-600 dark:text-neutral-400">
+                <User size={16} />
+                <span className="text-sm">{user.email}</span>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:text-red-500 hover:bg-red-500/5 rounded-full transition-all"
+              >
+                <LogOut size={16} />
+                <span className="hidden sm:inline">Déconnexion</span>
+              </button>
+            </div>
+          ) : (
+            <Link href="/login">
+              <Button size="sm" className="rounded-full px-5">
+                Se connecter
+              </Button>
+            </Link>
           )}
         </div>
       </nav>

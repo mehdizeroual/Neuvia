@@ -6,8 +6,6 @@ import {
     X,
     Sparkles,
     Users,
-    Clock,
-    ShoppingBag,
     Wrench,
     LineChart,
     Settings,
@@ -66,25 +64,11 @@ const features: PricingFeature[] = [
         premium: "Jusqu'à 5 comptes",
     },
     {
-        label: "Accès aux mondes Neuvia",
+        label: "Accès aux expériences Neuvia",
         icon: <Sparkles className="w-5 h-5" />,
-        decouverte: "Sélection limitée",
+        decouverte: "3 expériences / matière",
         essentiel: "Accès complet",
-        premium: "Accès complet + exclusifs",
-    },
-    {
-        label: "Temps d'accès mensuel",
-        icon: <Clock className="w-5 h-5" />,
-        decouverte: "4 h / mois",
-        essentiel: "12 h / mois",
-        premium: "Illimité*",
-    },
-    {
-        label: "Accès à la marketplace",
-        icon: <ShoppingBag className="w-5 h-5" />,
-        decouverte: "Consultation uniquement",
-        essentiel: "Achat de contenus",
-        premium: "Achat + contenus premium",
+        premium: "Accès complet + accès anticipé",
     },
     {
         label: "Création de scénarios",
@@ -371,9 +355,6 @@ export default function PricingPage() {
                         </table>
                     </motion.div>
 
-                    <p className="text-center text-sm text-neutral-500 dark:text-neutral-400 mt-8">
-                        * Illimité : Dans le cadre d'une utilisation raisonnable (fair use)
-                    </p>
                 </div>
             </section>
 
