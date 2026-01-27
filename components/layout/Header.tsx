@@ -61,8 +61,6 @@ export default function Header() {
 
         {/* Actions à droite */}
         <div className="flex items-center gap-2">
-          <ThemeToggle />
-
           {user ? (
             <div className="flex items-center gap-2">
               <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-neutral-100/50 dark:bg-neutral-800/50 text-neutral-600 dark:text-neutral-400">
@@ -84,6 +82,8 @@ export default function Header() {
               </Button>
             </Link>
           )}
+
+          <ThemeToggle />
         </div>
       </nav>
     </header>

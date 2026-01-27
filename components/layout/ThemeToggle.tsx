@@ -26,7 +26,7 @@ function ThemeToggleButton() {
   return (
     <motion.button
       onClick={toggleTheme}
-      className="relative p-2 rounded-lg bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors duration-200"
+      className="relative p-2 rounded-full hover:bg-white/20 dark:hover:bg-white/10 transition-colors duration-200"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       aria-label="Toggle theme"
