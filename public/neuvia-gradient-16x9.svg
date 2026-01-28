@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <!-- Fond principal -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F9FAFB"/>
+      <stop offset="50%" stop-color="#ecfeff" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#f5f3ff" stop-opacity="0.5"/>
+    </linearGradient>
+    <!-- Halo cyan (primary) -->
+    <radialGradient id="haloCyan" cx="10%" cy="20%" r="40%">
+      <stop offset="0%" stop-color="#06B6D4" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#06B6D4" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Halo violet (secondary) -->
+    <radialGradient id="haloViolet" cx="85%" cy="75%" r="50%">
+      <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Halo cyan secondaire -->
+    <radialGradient id="haloCyan2" cx="60%" cy="10%" r="35%">
+      <stop offset="0%" stop-color="#22D3EE" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Halo violet secondaire -->
+    <radialGradient id="haloViolet2" cx="30%" cy="85%" r="35%">
+      <stop offset="0%" stop-color="#A78BFA" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#A78BFA" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- Fond -->
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <!-- Halos -->
+  <rect width="1920" height="1080" fill="url(#haloCyan)"/>
+  <rect width="1920" height="1080" fill="url(#haloViolet)"/>
+  <rect width="1920" height="1080" fill="url(#haloCyan2)"/>
+  <rect width="1920" height="1080" fill="url(#haloViolet2)"/>
+</svg>
